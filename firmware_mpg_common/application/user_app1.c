@@ -87,7 +87,7 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
- 
+ HEARTBEAT_OFF();
   /* If good initialization, set state to Idle */
   if( 1 )
   {
