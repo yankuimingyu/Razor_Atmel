@@ -89,9 +89,10 @@ void UserApp1Initialize(void)
 {
   //test  branch  
   /* If good initialization, set state to Idle */
+  HEARTBEAT_OFF();
   if( 1 )
   {
-    UserApp1_StateMachine = UserApp1SM_Idle;
+    UserApp1_StateMachine = User_app_firmware;
   }
   else
   {
@@ -126,7 +127,131 @@ void UserApp1RunActiveState(void)
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Private functions                                                                                                  */
 /*--------------------------------------------------------------------------------------------------------------------*/
+// firmware system intruduce 2017-5-4
+//what mean static function?
+//http://blog.163.com/sunshine_linting/blog/static/44893323201191294825184/
+//you should to know the true of
+static void User_app_firmware(void)
+	{
+        static u16 u16_counter_blink = 0;
+		
+		static BOOL judge_ledheart   = FALSE;
+		static BOOL B_push_button    = FALSE;
+		static BOOL B_LED[7]         = FALSE;
+		 u8   u8_ledcount      =0;
+		if(WasButtonPressed(BUTTON0))
+			{
+			if(B_push_button == TRUE)
+				{
+			 B_push_button=FALSE;
+                         for(u8_ledcount=0;u8_ledcount<=6;u8_ledcount++)
+							{
+							B_LED[u8_ledcount] = FALSE;
+							}///}
+				
+			  LedOn(7);
+			  LedOff(7);
+				}
+			 else
+			 	{
+			 B_push_button=TRUE;
+			   LedOff(7);
+			   LedOn(7);
+			 	}
+			 ButtonAcknowledge(BUTTON0);
+			}
+		/*if(B_push_button==TRUE)//start the cycle 
+			{//the rand number been created
+			switch(G_u32SystemTime1ms%8)
+				{
+				  case 0:
+				  	B_LED[0] = TRUE;
+				  	break;
+				  case 1:
+				  	B_LED[1] = TRUE;
+				  	break;
+				   case 2:
+				   	B_LED[2] = TRUE;
+				   	break;
+					case 3:
+				    B_LED[3] = TRUE;
+						break;
+					default:
+						for(u8_ledcount=0;u8_ledcount<=6;u8_ledcount++)
+							{
+							B_LED[u8_ledcount] = FALSE;
+							}///
+						break;
+						
+				}
+			}*/
+		if(u16_counter_blink%1000==0)///1s turn on
+			{
+			
+				  
+			  for( u8_ledcount=0;u8_ledcount<=7;u8_ledcount++)
+			  	{
+			  	if(B_LED[u8_ledcount]==TRUE)
+			  		{
+			  		 LedOn(u8_ledcount);//light the index led
+			  		 break;
+			  		}
+				
+				
+			  
+			  	/*switch(B_LED[u8_ledcount])
+			  		{case TRUE:
+			  		  LedOn(u8_ledcount);
+			  		 break;
+					 default:
+					 	LedOff(u8_ledcount);
+					 	
+			  		}*/
+			  	}
+			}
+		u16_counter_blink++;
+		if(G_u32SystemTime1ms%2000==0)///2s turn off
+			{
+			 for(u8_ledcount=0;u8_ledcount<=6;u8_ledcount++)
+			 	{
+			 	    LedOff(u8_ledcount);
+					B_LED[u8_ledcount] = FALSE;
+			 	}
+			}
+			
+		/*if(judge_ledheart==TRUE)
+			{
+			  LedOn(RED);
+			  LedOn(BLUE)
+			  	LedOn(YELLOW);
+			  	LedOn(CYAN);
+			  	LedOn(WHITE);
+			  	
+                          HEARTBEAT_ON();
+			
+			}
+		else
+			{
+			 HEARTBEAT_OFF();
+			 LedOff(RED);
+			 	
+			}
+		u16_counter_blink++;
+		if(G_u32SystemTime1ms%1000==0)
+			
 
+			{
+			   if(judge_ledheart==TRUE)
+			   	judge_ledheart= FALSE;
+			   else
+			   	judge_ledheart= TRUE;
+			  u16_counter_blink=0;
+			}
+			
+			*/
+	    
+	}
+//
 
 /**********************************************************************************************************************
 State Machine Function Definitions
