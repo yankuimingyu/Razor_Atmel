@@ -57,7 +57,8 @@ State Machine Declarations
 static void UserApp1SM_Idle(void);    
 
 static void UserApp1SM_Error(void);         
-static void UserApp1SM_FailedInit(void);        
+static void UserApp1SM_FailedInit(void);  
+   static void        User_app_firmware(void);
 
 
 #endif /* __USER_APP1_H */
