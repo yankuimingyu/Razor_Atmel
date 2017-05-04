@@ -42,7 +42,7 @@ All Global variable names shall start with "G_UserApp1"
 ***********************************************************************************************************************/
 /* New variables */
 volatile u32 G_u32UserApp1Flags;                       /* Global state flags */
-
+///this is test
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Existing variables (defined in other files -- should all contain the "extern" keyword) */
@@ -135,8 +135,55 @@ State Machine Function Definitions
 /*-------------------------------------------------------------------------------------------------------------------*/
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
-{
-
+{static u8 u8_counter = 0;
+ static u8 u8_single_digit=0;
+ static u8 u8_tens_digit  =0;
+ static u8 a_u8_led_display[8]=0;
+ u8 u8_cycle_counter=0,u8_temp_i=0;
+ 	
+   
+   ///implement the count the button push
+   if(WasButtonPressed(BUTTON0))
+   	{
+   	   ButtonAcknowledge(BUTTON0);
+	   u8_counter++;
+	   
+   	}
+   if(u8_counter>=100)//cannot out of range 99 ,otherwise cannot display
+   	u8_counter=0;
+   //BCD computational method
+   u8_single_digit= u8_counter%10;
+   u8_tens_digit  = u8_counter/10;
+   while(u8_single_digit!=0)
+   	{
+   	  u8_temp_i=u8_single_digit%2;
+	  a_u8_led_display[u8_cycle_counter]=u8_temp_i;
+	  u8_cycle_counter++;
+	  u8_single_digit=u8_single_digit/2;
+   	     
+   	}
+   //u8_temp_i=0;
+   //u8_cycle_counter = 3;
+   while(u8_tens_digit!=0)
+   	{ u8_temp_i= u8_tens_digit%2;
+      a_u8_led_display[u8_cycle_counter]= u8_temp_i;
+	  u8_cycle_counter++;
+	  u8_tens_digit= u8_tens_digit/2;
+   	}
+   /*for(u8_cycle_counter=0;u8_cycle_counter<=7;u8_cycle_counter++)
+   	{
+   	    if(a_u8_led_display[u8_cycle_counter]==1)
+			
+   	}*/
+   	if(a_u8_led_display[0]==1)
+		LedOn(RED);
+   switch(u8_counter)
+   	{
+   	    case 1:
+			break;
+		case 2:
+			break;
+   	}
 } /* end UserApp1SM_Idle() */
     
 #if 0
